@@ -1,4 +1,4 @@
-package org.cms;
+package org.cms.client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
