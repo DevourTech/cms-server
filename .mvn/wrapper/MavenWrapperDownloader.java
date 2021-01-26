@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import java.net.*;
 import java.io.*;
+import java.net.*;
 import java.nio.channels.*;
 import java.util.Properties;
 
@@ -25,21 +25,19 @@ public class MavenWrapperDownloader {
 	/**
 	 * Default URL to download the maven-wrapper.jar from, if no 'downloadUrl' is provided.
 	 */
-	private static final String DEFAULT_DOWNLOAD_URL = "https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/"
-			+ WRAPPER_VERSION + "/maven-wrapper-" + WRAPPER_VERSION + ".jar";
+	private static final String DEFAULT_DOWNLOAD_URL =
+		"https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/" + WRAPPER_VERSION + "/maven-wrapper-" + WRAPPER_VERSION + ".jar";
 
 	/**
 	 * Path to the maven-wrapper.properties file, which might contain a downloadUrl property to
 	 * use instead of the default one.
 	 */
-	private static final String MAVEN_WRAPPER_PROPERTIES_PATH =
-			".mvn/wrapper/maven-wrapper.properties";
+	private static final String MAVEN_WRAPPER_PROPERTIES_PATH = ".mvn/wrapper/maven-wrapper.properties";
 
 	/**
 	 * Path where the maven-wrapper.jar will be saved to.
 	 */
-	private static final String MAVEN_WRAPPER_JAR_PATH =
-			".mvn/wrapper/maven-wrapper.jar";
+	private static final String MAVEN_WRAPPER_JAR_PATH = ".mvn/wrapper/maven-wrapper.jar";
 
 	/**
 	 * Name of the property which should be used to override the default download url for the wrapper.
@@ -79,8 +77,7 @@ public class MavenWrapperDownloader {
 		File outputFile = new File(baseDirectory.getAbsolutePath(), MAVEN_WRAPPER_JAR_PATH);
 		if (!outputFile.getParentFile().exists()) {
 			if (!outputFile.getParentFile().mkdirs()) {
-				System.out.println(
-						"- ERROR creating output directory '" + outputFile.getParentFile().getAbsolutePath() + "'");
+				System.out.println("- ERROR creating output directory '" + outputFile.getParentFile().getAbsolutePath() + "'");
 			}
 		}
 		System.out.println("- Downloading to: " + outputFile.getAbsolutePath());
@@ -99,12 +96,14 @@ public class MavenWrapperDownloader {
 		if (System.getenv("MVNW_USERNAME") != null && System.getenv("MVNW_PASSWORD") != null) {
 			String username = System.getenv("MVNW_USERNAME");
 			char[] password = System.getenv("MVNW_PASSWORD").toCharArray();
-			Authenticator.setDefault(new Authenticator() {
-				@Override
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(username, password);
+			Authenticator.setDefault(
+				new Authenticator() {
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(username, password);
+					}
 				}
-			});
+			);
 		}
 		URL website = new URL(urlString);
 		ReadableByteChannel rbc;
@@ -114,5 +113,4 @@ public class MavenWrapperDownloader {
 		fos.close();
 		rbc.close();
 	}
-
 }
