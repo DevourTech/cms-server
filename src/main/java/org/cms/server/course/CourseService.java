@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CourseService {
@@ -30,9 +29,6 @@ public class CourseService {
                 .collect(Collectors.toList());
 
         return filteredCourses.get(0);
-
-	public List<Course> getAllCourses() {
-		return courses;
 	}
 
     public void addCourse(Course course){

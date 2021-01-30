@@ -3,7 +3,7 @@
 .PHONY: build
 build:
 	@echo "Installing dependencies..."
-	@mvn clean install -s settings.xml
+	@mvn clean install -U -s settings.xml
 
 .PHONY: run
 run: build
