@@ -13,8 +13,19 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 15.0.1
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '8.0.23'
+          mysql database: 'org_cms'
+          mysql user: 'cms'
+          mysql password: ${{ secrets.CMS_MYSQL_PASSWORD }}
       - name: Build and test with Maven
         run: mvn --batch-mode --update-snapshots verify -s settings.xml && mvn test
         env:
           GITHUB_USERNAME: rohan23chhabra
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CMS_MYSQL_DB: org_cms
+          CMS_MYSQL_HOST: localhost
+          CMS_MYSQL_PORT: 3306
+          CMS_MYSQL_USERNAME: cms
+          CMS_MYSQL_PASSWORD: ${{ secrets.CMS_MYSQL_PASSWORD }}

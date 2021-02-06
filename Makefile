@@ -1,3 +1,6 @@
+include scripts.mk
+
+.ONESHELL:
 .DEFAULT_GOAL := run
 
 .PHONY: build
@@ -16,8 +19,7 @@ test: build
 	@mvn test
 
 .PHONY: fmt
-fmt:
-	@prettier --write "**/*.java"
+fmt: ; @$(value format_if_executable_present)
 
 .PHONY: install-formatter
 install-formatter:
