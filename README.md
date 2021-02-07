@@ -27,6 +27,22 @@ export GITHUB_TOKEN={Copied token from the above step}
 Make sure that the names of environment variables are as it is.
 Otherwise, you might face a tough time :P
 
+### MYSQL setup
+To set up a mysql instance on your local, follow these steps:
+
+* Download mysql server and follow the secure installation steps from [here](https://linuxhint.com/install_mysql_ubuntu_2004/)
+* Create a user (using the above link) which will be used to authenticate and perform CRUD operations on the db
+* Grant privileges to the user (refer above link).
+* Create the db to perform CRUD operations.
+* Create the following environment variables:
+```shell
+export CMS_MYSQL_HOST=localhost
+export CMS_MYSQL_PORT=3306
+export CMS_MYSQL_USERNAME=<Name of the user created above>
+export CMS_MYSQL_PASSWORD=<Password for the above user>
+export CMS_MYSQL_DB=<Name of the database to perform CRUD operations>
+```
+
 ### Code Style
 
 This project uses [prettier-java](https://github.com/jhipster/prettier-java) to format JAVA code. 
