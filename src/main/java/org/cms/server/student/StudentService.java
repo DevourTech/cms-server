@@ -47,8 +47,8 @@ public class StudentService {
 		logger.info(String.format("[%s] addStudent HIT", addStudentPrefix));
 		logger.info(String.format("[%s] Student received to be added - %s", addStudentPrefix, student));
 
-		Student savedstudent = studentRepository.save(student);
-		String genId = String.valueOf(savedstudent.getId());
+		Student savedStudent = studentRepository.save(student);
+		String genId = String.valueOf(savedStudent.getId());
 		logger.info(String.format("[%s] Student successfully added with id = %s", addStudentPrefix, genId));
 
 		return genId;
