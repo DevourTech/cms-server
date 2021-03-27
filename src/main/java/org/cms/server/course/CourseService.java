@@ -28,14 +28,14 @@ public class CourseService {
 	}
 
 	// If course doesn't exist in db, it returns null
-	public Course getCourse(int id) {
-		logger.info(String.format("[%s] id received to fetch course = %d", getCoursePrefix, id));
+	public Course getCourse(String id) {
+		logger.info(String.format("[%s] id received to fetch course = %s", getCoursePrefix, id));
 
 		Course byId = courseRepository.findById(id);
 		if (byId == null) {
-			logger.error(String.format("[%s] Course with id %d doesn't exist in db", getCoursePrefix, id));
+			logger.error(String.format("[%s] Course with id %s doesn't exist in db", getCoursePrefix, id));
 		} else {
-			logger.info(String.format("[%s] Course fetched from db with id %d is %s", getCoursePrefix, id, byId));
+			logger.info(String.format("[%s] Course fetched from db with id %s is %s", getCoursePrefix, id, byId));
 		}
 
 		return byId;
@@ -55,19 +55,19 @@ public class CourseService {
 
 	// Returns true if update was successful
 	// Returns false if course to be updated doesn't exist
-	public boolean updateCourse(int id, Course course) {
-		logger.info(String.format("[%s] updateCourse HIT for id = %d", updateCoursePrefix, id));
+	public boolean updateCourse(String id, Course course) {
+		logger.info(String.format("[%s] updateCourse HIT for id = %s", updateCoursePrefix, id));
 		logger.info(String.format("[%s] Course details = %s", updateCoursePrefix, course));
 
 		Course existingCourse = courseRepository.findById(id);
 		if (existingCourse == null) {
-			logger.error(String.format("[%s] Course to be updated (id = %d) doesn't exist", updateCoursePrefix, id));
+			logger.error(String.format("[%s] Course to be updated (id = %s) doesn't exist", updateCoursePrefix, id));
 			return false;
 		}
 
 		updateExistingCourse(existingCourse, course);
 		courseRepository.save(existingCourse);
-		logger.info(String.format("[%s] Course with id %d successfully updated", updateCoursePrefix, id));
+		logger.info(String.format("[%s] Course with id %s successfully updated", updateCoursePrefix, id));
 
 		return true;
 	}
@@ -84,17 +84,17 @@ public class CourseService {
 
 	// Returns true if course is successfully deleted
 	// Returns false if course doesn't exist
-	public boolean deleteCourse(int id) {
-		logger.info(String.format("[%s] deleteCourse HIT for id = %d", deleteCoursePrefix, id));
+	public boolean deleteCourse(String id) {
+		logger.info(String.format("[%s] deleteCourse HIT for id = %s", deleteCoursePrefix, id));
 
 		Course toBeRemoved = courseRepository.findById(id);
 		if (toBeRemoved == null) {
-			logger.error(String.format("[%s] Course to be deleted (id = %d) doesn't exist", deleteCoursePrefix, id));
+			logger.error(String.format("[%s] Course to be deleted (id = %s) doesn't exist", deleteCoursePrefix, id));
 			return false;
 		}
 
 		courseRepository.delete(toBeRemoved);
-		logger.info(String.format("[%s] Course with id %d is successfully deleted", deleteCoursePrefix, id));
+		logger.info(String.format("[%s] Course with id %s is successfully deleted", deleteCoursePrefix, id));
 		return true;
 	}
 }

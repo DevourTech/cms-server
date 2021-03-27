@@ -29,14 +29,14 @@ public class StudentService {
 	}
 
 	// If student doesn't exist in db, it returns null
-	public Student getStudent(int id) {
-		logger.info(String.format("[%s] id received to fetch student = %d", getStudentPrefix, id));
+	public Student getStudent(String id) {
+		logger.info(String.format("[%s] id received to fetch student = %s", getStudentPrefix, id));
 
 		Student byId = studentRepository.findById(id);
 		if (byId == null) {
-			logger.error(String.format("[%s] Student with id %d doesn't exist in db", getStudentPrefix, id));
+			logger.error(String.format("[%s] Student with id %s doesn't exist in db", getStudentPrefix, id));
 		} else {
-			logger.info(String.format("[%s] Student fetched from db with id %d is %s", getStudentPrefix, id, byId));
+			logger.info(String.format("[%s] Student fetched from db with id %s is %s", getStudentPrefix, id, byId));
 		}
 
 		return byId;
@@ -56,19 +56,19 @@ public class StudentService {
 
 	// Returns true if update was successful
 	// Returns false if student to be updated doesn't exist
-	public boolean updateStudent(int id, Student student) {
-		logger.info(String.format("[%s] updateStudent HIT for id = %d", updateStudentPrefix, id));
+	public boolean updateStudent(String id, Student student) {
+		logger.info(String.format("[%s] updateStudent HIT for id = %s", updateStudentPrefix, id));
 		logger.info(String.format("[%s] Student details = %s", updateStudentPrefix, student));
 
 		Student existingStudent = studentRepository.findById(id);
 		if (existingStudent == null) {
-			logger.error(String.format("[%s] Student to be updated (id = %d) doesn't exist", updateStudentPrefix, id));
+			logger.error(String.format("[%s] Student to be updated (id = %s) doesn't exist", updateStudentPrefix, id));
 			return false;
 		}
 
 		updateExistingStudent(existingStudent, student);
 		studentRepository.save(existingStudent);
-		logger.info(String.format("[%s] Student with id %d successfully updated", updateStudentPrefix, id));
+		logger.info(String.format("[%s] Student with id %s successfully updated", updateStudentPrefix, id));
 
 		return true;
 	}
@@ -81,17 +81,17 @@ public class StudentService {
 
 	// Returns true if student is successfully deleted
 	// Returns false if student doesn't exist
-	public boolean deleteStudent(int id) {
-		logger.info(String.format("[%s] deleteStudent HIT for id = %d", deleteStudentPrefix, id));
+	public boolean deleteStudent(String id) {
+		logger.info(String.format("[%s] deleteStudent HIT for id = %s", deleteStudentPrefix, id));
 
 		Student toBeRemoved = studentRepository.findById(id);
 		if (toBeRemoved == null) {
-			logger.error(String.format("[%s] Student to be deleted (id = %d) doesn't exist", deleteStudentPrefix, id));
+			logger.error(String.format("[%s] Student to be deleted (id = %s) doesn't exist", deleteStudentPrefix, id));
 			return false;
 		}
 
 		studentRepository.delete(toBeRemoved);
-		logger.info(String.format("[%s] Student with id %d is successfully deleted", deleteStudentPrefix, id));
+		logger.info(String.format("[%s] Student with id %s is successfully deleted", deleteStudentPrefix, id));
 		return true;
 	}
 }
