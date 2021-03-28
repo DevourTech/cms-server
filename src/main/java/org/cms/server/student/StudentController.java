@@ -1,11 +1,10 @@
 package org.cms.server.student;
 
+import java.util.List;
 import org.cms.core.student.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class StudentController {

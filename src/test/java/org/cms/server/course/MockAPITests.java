@@ -25,7 +25,10 @@ public class MockAPITests {
 
 	@Test
 	public void testGetAllCourses() {
-		List<Course> courseList = Arrays.asList(new Course("OOPS", "I did it again!"), new Course("Formal methods", "Wasn't so formal!"));
+		List<Course> courseList = Arrays.asList(
+			new Course("OOPS", "CSE", "I did it again!"),
+			new Course("Formal methods", "CSE", "Wasn't so formal!")
+		);
 
 		when(courseRepoMock.findAll()).thenReturn(courseList);
 		assertEquals(courseList, courseService.getAllCourses());
@@ -33,7 +36,7 @@ public class MockAPITests {
 
 	@Test
 	public void testGetCourseNotNull() {
-		Course expectedCourse = new Course("1", "Networking", "Something which I didn't do!");
+		Course expectedCourse = new Course("1", "Networking", "CSE", "Something which I didn't do!");
 
 		when(courseRepoMock.findById("1")).thenReturn(expectedCourse);
 		assertEquals(expectedCourse, courseService.getCourse("1"));
@@ -49,9 +52,10 @@ public class MockAPITests {
 	public void testAddCourse() {
 		String courseName = "Research Trends in CS";
 		String desc = "Why though?";
+		String branch = "CSE";
 
-		Course tobeAdded = new Course(courseName, desc);
-		Course savedCourseWithId = new Course("3", courseName, desc);
+		Course tobeAdded = new Course(courseName, branch, desc);
+		Course savedCourseWithId = new Course("3", courseName, branch, desc);
 
 		when(courseRepoMock.save(tobeAdded)).thenReturn(savedCourseWithId);
 		assertEquals("3", courseService.addCourse(tobeAdded));
@@ -59,8 +63,8 @@ public class MockAPITests {
 
 	@Test
 	public void testUpdateCourseHappyPath() {
-		Course savedCourse = new Course("4", "Operating Systems", "Do I have a thing for them?");
-		Course tobeUpdated = new Course("4", "", "I love them!");
+		Course savedCourse = new Course("4", "Operating Systems", "CSE", "Do I have a thing for them?");
+		Course tobeUpdated = new Course("4", "CSE", "I love them!");
 
 		when(courseRepoMock.findById("4")).thenReturn(savedCourse);
 		when(courseRepoMock.save(savedCourse)).thenReturn(savedCourse);
@@ -80,7 +84,7 @@ public class MockAPITests {
 
 	@Test
 	public void testDeleteCourseHappyPath() {
-		Course savedCourse = new Course("DBMS", "You're gone!");
+		Course savedCourse = new Course("DBMS", "CSE", "You're gone!");
 		String id = "45";
 
 		when(courseRepoMock.findById(id)).thenReturn(savedCourse);
