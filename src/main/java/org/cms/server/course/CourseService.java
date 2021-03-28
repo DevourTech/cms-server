@@ -77,6 +77,10 @@ public class CourseService {
 			existingCourse.setName(otherCourse.getName());
 		}
 
+		if (!otherCourse.getBranch().equals("")) {
+			existingCourse.setBranch(otherCourse.getName());
+		}
+
 		if (!otherCourse.getDescription().equals("")) {
 			existingCourse.setDescription(otherCourse.getDescription());
 		}
