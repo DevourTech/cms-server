@@ -74,7 +74,7 @@ public class InstructorService {
 	}
 
 	private void updateExistingInstructor(Instructor existingInstructor, Instructor otherInstructor) {
-		if (!otherInstructor.getName().equals("")) {
+		if (otherInstructor.getName() != null) {
 			existingInstructor.setName(otherInstructor.getName());
 		}
 	}

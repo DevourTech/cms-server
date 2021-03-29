@@ -1,5 +1,6 @@
 package org.cms.server.security;
 
+import java.util.Arrays;
 import org.cms.server.commons.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -10,43 +11,56 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authProvider());
+		auth
+			.userDetailsService(userDetailsService())
+			.passwordEncoder(NoOpPasswordEncoder.getInstance())
+			.and()
+			.authenticationProvider(authProvider());
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+			.csrf()
+			.disable()
 			.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/")
-			.permitAll()
-			.antMatchers(HttpMethod.GET, "/api/courses")
-			.permitAll()
-			.antMatchers(HttpMethod.POST, "/api/courses")
-			.hasRole(Role.ADMIN.name())
-			.antMatchers(HttpMethod.DELETE, "/api/courses/**")
-			.hasRole(Role.ADMIN.name())
+			.antMatchers(HttpMethod.POST, "/api/**")
+			.hasAuthority(Role.ADMIN)
+			.antMatchers(HttpMethod.DELETE, "/api/**")
+			.hasAuthority(Role.ADMIN)
 			.antMatchers(HttpMethod.PUT, "/api/courses/**")
-			.hasAnyRole(Role.ADMIN.name(), Role.INSTRUCTOR.name())
-			.antMatchers(HttpMethod.GET, "/api/students")
+			.hasAnyAuthority(Role.ADMIN, Role.INSTRUCTOR)
+			.antMatchers(HttpMethod.PUT, "/api/**")
+			.hasAuthority(Role.ADMIN)
+			.antMatchers(HttpMethod.GET, "/**")
 			.permitAll()
-			.antMatchers(HttpMethod.POST, "/api/students")
-			.hasRole(Role.ADMIN.name())
-			.antMatchers(HttpMethod.PUT, "/api/students/**")
-			.hasRole(Role.ADMIN.name())
-			.antMatchers(HttpMethod.DELETE, "/api/students/**")
-			.hasRole(Role.ADMIN.name())
-			//			.antMatchers(HttpMethod.GET, "/api/instructors").permitAll()
-			//			.antMatchers(HttpMethod.POST, "/api/instructors").hasRole(Role.ADMIN.name())
-			//			.antMatchers(HttpMethod.PUT, "/api/instructor/**").hasRole(Role.ADMIN.name())
-			//			.antMatchers(HttpMethod.DELETE, "/api/instructor/**").hasRole(Role.ADMIN.name())
+			.anyRequest()
+			.authenticated()
 			.and()
-			.httpBasic();
+			.httpBasic()
+			.and()
+			.cors();
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 	@Bean

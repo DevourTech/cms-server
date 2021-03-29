@@ -22,7 +22,9 @@ public class CourseController {
 	}
 
 	@RequestMapping
-	public String home() { return "<h1> CMS hai be </h1>"; }
+	public String home() {
+		return "<h1> CMS hai be </h1>";
+	}
 
 	@RequestMapping("/api/courses")
 	public List<Course> getAllCourses() {
