@@ -73,7 +73,7 @@ public class StudentService {
 	}
 
 	private void updateExistingStudent(Student existingStudent, Student otherStudent) {
-		if (!otherStudent.getName().equals("")) {
+		if (otherStudent.getName() != null) {
 			existingStudent.setName(otherStudent.getName());
 		}
 	}

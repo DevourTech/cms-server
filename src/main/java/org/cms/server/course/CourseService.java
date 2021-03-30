@@ -73,15 +73,15 @@ public class CourseService {
 	}
 
 	private void updateExistingCourse(Course existingCourse, Course otherCourse) {
-		if (!otherCourse.getName().equals("")) {
+		if (otherCourse.getName() != null) {
 			existingCourse.setName(otherCourse.getName());
 		}
 
-		if (!otherCourse.getBranch().equals("")) {
+		if (otherCourse.getBranch() != null) {
 			existingCourse.setBranch(otherCourse.getName());
 		}
 
-		if (!otherCourse.getDescription().equals("")) {
+		if (otherCourse.getDescription() != null) {
 			existingCourse.setDescription(otherCourse.getDescription());
 		}
 	}

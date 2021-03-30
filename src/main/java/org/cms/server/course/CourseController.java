@@ -21,6 +21,11 @@ public class CourseController {
 		this.courseService = courseService;
 	}
 
+	@RequestMapping
+	public String home() {
+		return "<h1> CMS hai be </h1>";
+	}
+
 	@RequestMapping("/api/courses")
 	public List<Course> getAllCourses() {
 		return courseService.getAllCourses();

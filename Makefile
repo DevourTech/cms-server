@@ -6,12 +6,12 @@ build:
 	@mvn clean install -U -s settings.xml
 
 .PHONY: run
-run: build
+run:
 	@echo "Launching Spring REST API Service..."
 	@mvn spring-boot:run
 
 .PHONY: test
-test: build
+test:
 	@echo "Running server tests..."
 	@mvn test
 
