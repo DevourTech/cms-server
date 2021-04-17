@@ -1,6 +1,7 @@
 package org.cms.server.student;
 
 import java.util.List;
+import org.cms.core.course.Course;
 import org.cms.core.student.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ public class StudentController {
 	private static final String UPDATE_STUDENT_SUCCESS = "Student with id %s is successfully updated";
 	private static final String DELETE_STUDENT_FAILED = "Student to be deleted with id %s doesn't exist in our database records";
 	private static final String DELETE_STUDENT_SUCCESS = "Student with id %s is successfully deleted";
+	private static final String SUBSCRIBE_FAILED = "Student with id %s couldn't be subscribed to course with id %s";
+	private static final String SUBSCRIBE_SUCCESS = "Student with id %s is successfully subscribed to course with id %s";
 
 	private final StudentService studentService;
 
@@ -59,5 +62,19 @@ public class StudentController {
 		}
 
 		return ResponseEntity.ok(String.format(DELETE_STUDENT_SUCCESS, id));
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/api/students/{id}/courses")
+	public List<Course> getCoursesForStudent(@PathVariable String id) {
+		return studentService.getCoursesForStudent(id);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/api/students/{student_id}/courses/{course_id}")
+	public ResponseEntity<String> subscribe(@PathVariable String student_id, @PathVariable String course_id) {
+		boolean isSuccessful = studentService.subscribe(student_id, course_id);
+		if (!isSuccessful) {
+			return new ResponseEntity<>(String.format(SUBSCRIBE_FAILED, student_id, course_id), HttpStatus.NOT_FOUND);
+		}
+		return ResponseEntity.ok(String.format(SUBSCRIBE_SUCCESS, student_id, course_id));
 	}
 }

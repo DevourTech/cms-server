@@ -1,7 +1,9 @@
 package org.cms.server.student;
 
 import java.util.List;
+import org.cms.core.course.Course;
 import org.cms.core.student.Student;
+import org.cms.server.course.CourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,15 @@ public class StudentService {
 	private static final String addStudentPrefix = "POST - addStudent";
 	private static final String updateStudentPrefix = "PUT - updateStudent";
 	private static final String deleteStudentPrefix = "DELETE - deleteStudent";
+	private static final String getCoursesForStudentPrefix = "GET - getCoursesForStudent";
+	private static final String subscribePrefix = "PUT - subscribe";
 
 	private final StudentRepository studentRepository;
+	private final CourseRepository courseRepository;
 
-	public StudentService(StudentRepository studentRepository) {
+	public StudentService(StudentRepository studentRepository, CourseRepository courseRepository) {
 		this.studentRepository = studentRepository;
+		this.courseRepository = courseRepository;
 	}
 
 	public List<Student> getAllStudents() {
@@ -91,6 +97,32 @@ public class StudentService {
 
 		studentRepository.delete(toBeRemoved);
 		logger.info(String.format("[%s] Student with id %s is successfully deleted", deleteStudentPrefix, id));
+		return true;
+	}
+
+	public List<Course> getCoursesForStudent(String id) {
+		logger.info(String.format("[%s] getCoursesForStudent HIT for id = %s", getCoursesForStudentPrefix, id));
+		Student student = getStudent(id);
+		return student.getCourses();
+	}
+
+	public boolean subscribe(String studentId, String courseId) {
+		logger.info(String.format("[%s] subscribe HIT for student id = %s and course id = %s", subscribePrefix, studentId, courseId));
+		Student student = studentRepository.findById(studentId);
+		if (student == null) {
+			logger.error(String.format("[%s] Student with id = %s doesn't exist; can't subscribe to course with id = %s", subscribePrefix, studentId, courseId));
+			return false;
+		}
+
+		Course course = courseRepository.findById(courseId);
+		if (course == null) {
+			logger.error(String.format("[%s] Course with id = %s doesn't exist; cannot be subscribed to student with id = %s", subscribePrefix, courseId, studentId));
+			return false;
+		}
+
+		student.getCourses().add(course);
+		studentRepository.save(student);
+		logger.info(String.format("[%s] Student with id = %s is successfully subscribed to course with id = %s", subscribePrefix, studentId, courseId));
 		return true;
 	}
 }
