@@ -2,6 +2,7 @@ package org.cms.server.course;
 
 import java.util.List;
 import org.cms.core.course.Course;
+import org.cms.core.http.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +42,10 @@ public class CourseController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/api/courses")
-	public ResponseEntity<String> addCourse(@RequestBody Course course) {
-		String idSaved = courseService.addCourse(course);
-		return ResponseEntity.ok(String.format(POST_COURSE_SUCCESS, idSaved));
+	public ResponseEntity<IdResponse> addCourse(@RequestBody Course course) {
+		String id = courseService.addCourse(course);
+		String message = String.format(POST_COURSE_SUCCESS, id);
+		return ResponseEntity.ok(new IdResponse(id, message));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/api/courses/{id}")

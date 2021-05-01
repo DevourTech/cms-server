@@ -1,6 +1,7 @@
 package org.cms.server.instructor;
 
 import java.util.List;
+import org.cms.core.http.IdResponse;
 import org.cms.core.instructor.Instructor;
 import org.cms.server.instructor.InstructorService;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,10 @@ public class InstructorController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/api/instructors")
-	public ResponseEntity<String> addInstructor(@RequestBody Instructor instructor) {
-		String idSaved = instructorService.addInstructor(instructor);
-		return ResponseEntity.ok(String.format(POST_INSTRUCTOR_SUCCESS, idSaved));
+	public ResponseEntity<IdResponse> addInstructor(@RequestBody Instructor instructor) {
+		String id = instructorService.addInstructor(instructor);
+		String message = String.format(POST_INSTRUCTOR_SUCCESS, id);
+		return ResponseEntity.ok(new IdResponse(id, message));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/api/instructors/{id}")
