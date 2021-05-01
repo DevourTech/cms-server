@@ -110,19 +110,40 @@ public class StudentService {
 		logger.info(String.format("[%s] subscribe HIT for student id = %s and course id = %s", subscribePrefix, studentId, courseId));
 		Student student = studentRepository.findById(studentId);
 		if (student == null) {
-			logger.error(String.format("[%s] Student with id = %s doesn't exist; can't subscribe to course with id = %s", subscribePrefix, studentId, courseId));
+			logger.error(
+				String.format(
+					"[%s] Student with id = %s doesn't exist; can't subscribe to course with id = %s",
+					subscribePrefix,
+					studentId,
+					courseId
+				)
+			);
 			return false;
 		}
 
 		Course course = courseRepository.findById(courseId);
 		if (course == null) {
-			logger.error(String.format("[%s] Course with id = %s doesn't exist; cannot be subscribed to student with id = %s", subscribePrefix, courseId, studentId));
+			logger.error(
+				String.format(
+					"[%s] Course with id = %s doesn't exist; cannot be subscribed to student with id = %s",
+					subscribePrefix,
+					courseId,
+					studentId
+				)
+			);
 			return false;
 		}
 
 		student.getCourses().add(course);
 		studentRepository.save(student);
-		logger.info(String.format("[%s] Student with id = %s is successfully subscribed to course with id = %s", subscribePrefix, studentId, courseId));
+		logger.info(
+			String.format(
+				"[%s] Student with id = %s is successfully subscribed to course with id = %s",
+				subscribePrefix,
+				studentId,
+				courseId
+			)
+		);
 		return true;
 	}
 }

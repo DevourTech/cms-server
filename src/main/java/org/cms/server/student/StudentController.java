@@ -2,6 +2,7 @@ package org.cms.server.student;
 
 import java.util.List;
 import org.cms.core.course.Course;
+import org.cms.core.http.IdResponse;
 import org.cms.core.student.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +40,11 @@ public class StudentController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/api/students")
-	public ResponseEntity<String> addStudent(@RequestBody Student student) {
-		String idSaved = studentService.addStudent(student);
-		return ResponseEntity.ok(String.format(POST_STUDENT_SUCCESS, idSaved));
+	public ResponseEntity<IdResponse> addStudent(@RequestBody Student student) {
+		String id = studentService.addStudent(student);
+		String message = String.format(StudentController.POST_STUDENT_SUCCESS, id);
+
+		return ResponseEntity.ok(new IdResponse(id, message));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/api/students/{id}")
