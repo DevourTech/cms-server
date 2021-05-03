@@ -1,6 +1,7 @@
 package org.cms.server.instructor;
 
 import java.util.List;
+import org.cms.core.course.Course;
 import org.cms.core.http.IdResponse;
 import org.cms.core.instructor.Instructor;
 import org.cms.server.instructor.InstructorService;
@@ -16,6 +17,10 @@ public class InstructorController {
 	private static final String UPDATE_INSTRUCTOR_SUCCESS = "Instructor with id %s is successfully updated";
 	private static final String DELETE_INSTRUCTOR_FAILED = "Instructor to be deleted with id %s doesn't exist in our database records";
 	private static final String DELETE_INSTRUCTOR_SUCCESS = "Instructor with id %s is successfully deleted";
+	private static final String SUBSCRIBE_FAILED = "Instructor with id %s couldn't be subscribed to course with id %s";
+	private static final String SUBSCRIBE_SUCCESS = "Instructor with id %s is successfully subscribed to course with id %s";
+	private static final String UNSUBSCRIBE_FAILED = "Instructor with id %s couldn't be unsubscribed to course with id %s";
+	private static final String UNSUBSCRIBE_SUCCESS = "Instructor with id %s is successfully unsubscribed to course with id %s";
 
 	private final InstructorService instructorService;
 
@@ -62,5 +67,28 @@ public class InstructorController {
 		}
 
 		return ResponseEntity.ok(String.format(DELETE_INSTRUCTOR_SUCCESS, id));
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/api/instructors/{id}/courses")
+	public List<Course> getCoursesInstructor(@PathVariable String id) {
+		return instructorService.getCoursesForInstructor(id);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/api/instructors/{instructor_id}/courses/{course_id}")
+	public ResponseEntity<String> subscribe(@PathVariable String instructor_id, @PathVariable String course_id) {
+		boolean isSuccessful = instructorService.subscribe(instructor_id, course_id);
+		if (!isSuccessful) {
+			return new ResponseEntity<>(String.format(SUBSCRIBE_FAILED, instructor_id, course_id), HttpStatus.NOT_FOUND);
+		}
+		return ResponseEntity.ok(String.format(SUBSCRIBE_SUCCESS, instructor_id, course_id));
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/api/instructors/{instructor_id}/courses/{course_id}")
+	public ResponseEntity<String> unsubscribe(@PathVariable String instructor_id, @PathVariable String course_id) {
+		boolean isSuccessful = instructorService.unsubscribe(instructor_id, course_id);
+		if (!isSuccessful) {
+			return new ResponseEntity<>(String.format(UNSUBSCRIBE_FAILED, instructor_id, course_id), HttpStatus.NOT_FOUND);
+		}
+		return ResponseEntity.ok(String.format(UNSUBSCRIBE_SUCCESS, instructor_id, course_id));
 	}
 }

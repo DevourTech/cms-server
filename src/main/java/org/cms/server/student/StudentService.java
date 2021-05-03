@@ -1,6 +1,7 @@
 package org.cms.server.student;
 
 import java.util.List;
+import java.util.Set;
 import org.cms.core.course.Course;
 import org.cms.core.student.Student;
 import org.cms.server.course.CourseRepository;
@@ -103,7 +104,7 @@ public class StudentService {
 	public List<Course> getCoursesForStudent(String id) {
 		logger.info(String.format("[%s] getCoursesForStudent HIT for id = %s", getCoursesForStudentPrefix, id));
 		Student student = getStudent(id);
-		return student.getCourses();
+		return student.getSubscribedCourses();
 	}
 
 	public boolean subscribe(String studentId, String courseId) {
@@ -134,11 +135,52 @@ public class StudentService {
 			return false;
 		}
 
-		student.getCourses().add(course);
+		student.getSubscribedCourses().add(course);
 		studentRepository.save(student);
 		logger.info(
 			String.format(
 				"[%s] Student with id = %s is successfully subscribed to course with id = %s",
+				subscribePrefix,
+				studentId,
+				courseId
+			)
+		);
+		return true;
+	}
+
+	public boolean unsubscribe(String studentId, String courseId) {
+		logger.info(String.format("[%s] unsubscribe HIT for student id = %s and course id = %s", subscribePrefix, studentId, courseId));
+		Student student = studentRepository.findById(studentId);
+		if (student == null) {
+			logger.error(
+				String.format(
+					"[%s] Student with id = %s doesn't exist; can't unsubscribe to course with id = %s",
+					subscribePrefix,
+					studentId,
+					courseId
+				)
+			);
+			return false;
+		}
+
+		Course course = courseRepository.findById(courseId);
+		if (course == null) {
+			logger.error(
+				String.format(
+					"[%s] Course with id = %s doesn't exist; cannot be unsubscribed to student with id = %s",
+					subscribePrefix,
+					courseId,
+					studentId
+				)
+			);
+			return false;
+		}
+
+		student.getSubscribedCourses().remove(course);
+		studentRepository.save(student);
+		logger.info(
+			String.format(
+				"[%s] Student with id = %s has successfully unsubscribed to course with id = %s",
 				subscribePrefix,
 				studentId,
 				courseId
