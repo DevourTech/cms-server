@@ -13,8 +13,8 @@
             <repositories>
                 <repository>
                     <id>github</id>
-                    <name>GitHub rohan23chhabra Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/rohan23chhabra/cms-core</url>
+                    <name>GitHub DevourTech Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/DevourTech/cms-core</url>
                     <releases><enabled>true</enabled></releases>
                     <snapshots><enabled>true</enabled></snapshots>
                 </repository>

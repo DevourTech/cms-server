@@ -1,4 +1,4 @@
-package org.cms.server.files.errors;
+package org.cms.server.files.commons;
 
 public enum FileStatus {
 	UPLOAD_SUCCESS,
