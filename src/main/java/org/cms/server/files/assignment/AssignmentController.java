@@ -3,9 +3,7 @@ package org.cms.server.files.assignment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.cms.core.commons.DateTimePattern;
 import org.cms.core.course.Course;
@@ -95,10 +93,9 @@ public class AssignmentController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
-	@RequestMapping("/api/assignments/withCourses")
-	public List<Assignment> getAssignmentsWithCourses(@RequestParam Map<String, String> params) {
-		List<String> courseIds = new ArrayList<>(params.values());
-		return assignmentService.getAssignmentsWithCourseIds(courseIds);
+	@RequestMapping("/api/assignments/due")
+	public List<Assignment> getAssignmentsWithCourses(@RequestParam String studentId) {
+		return assignmentService.getDueAssignmentsForStudent(studentId);
 	}
 
 	private void produceAssignmentUploadEvent(String topic, Assignment assignment) throws JsonProcessingException {
