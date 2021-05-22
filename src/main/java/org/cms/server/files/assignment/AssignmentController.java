@@ -3,6 +3,9 @@ package org.cms.server.files.assignment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.cms.core.commons.DateTimePattern;
 import org.cms.core.course.Course;
@@ -68,7 +71,7 @@ public class AssignmentController {
 		logger.info("Assignment created and stored to DB");
 
 		// Produce assignment upload event to Kafka
-		String topic = assignmentCourse.getBranch().toLowerCase() + "_assignments";
+		String topic = "assignments";
 		produceAssignmentUploadEvent(topic, assignment);
 		return responseEntity;
 	}
@@ -76,6 +79,26 @@ public class AssignmentController {
 	@GetMapping("/download/assignments/{fileName}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 		return fileHandler.downloadFile(fileName, request, FileType.ASSIGNMENT);
+	}
+
+	@RequestMapping("/api/assignments")
+	public List<Assignment> getAllAssignments() {
+		return assignmentService.getAllAssignments();
+	}
+
+	@RequestMapping("/api/assignments/{id}")
+	public ResponseEntity<Assignment> getAssignment(@PathVariable String id) {
+		Assignment fetchedAssignment = assignmentService.getAssignment(id);
+		if (fetchedAssignment != null) {
+			return ResponseEntity.ok(fetchedAssignment);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	@RequestMapping("/api/assignments/withCourses")
+	public List<Assignment> getAssignmentsWithCourses(@RequestParam Map<String, String> params) {
+		List<String> courseIds = new ArrayList<>(params.values());
+		return assignmentService.getAssignmentsWithCourseIds(courseIds);
 	}
 
 	private void produceAssignmentUploadEvent(String topic, Assignment assignment) throws JsonProcessingException {
@@ -88,13 +111,15 @@ public class AssignmentController {
 		throws JsonProcessingException {
 		Instructor instructor = jacksonConfiguration.getMapper().readValue(instructorJSON, Instructor.class);
 		Assignment assignment = new Assignment(instructor, downloadPath, course);
-		String assignmentId = assignmentService.addAssignment(assignment);
-		assignment.setId(assignmentId);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimePattern.YYYY_MM_DD_HH_MM);
 		String currentTime = LocalDateTime.now().format(formatter);
+
 		assignment.setUploadDate(currentTime);
 		assignment.setDueDate(dueDate);
+
+		String assignmentId = assignmentService.addAssignment(assignment);
+		assignment.setId(assignmentId);
 		return assignment;
 	}
 

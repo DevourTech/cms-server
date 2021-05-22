@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.cms.core.commons.DateTimePattern;
 import org.cms.core.files.assignment.Assignment;
@@ -68,7 +69,7 @@ public class SubmissionController {
 		logger.info("Submission created and stored");
 
 		// Produce submission upload event to Kafka
-		String topic = assignmentForSubmission.getCourse().getBranch().toLowerCase() + "_submissions";
+		String topic = "submissions";
 		produceSubmissionUploadEvent(topic, submission);
 		return responseEntity;
 	}
@@ -76,6 +77,20 @@ public class SubmissionController {
 	@GetMapping("/download/submissions/{fileName}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 		return fileHandler.downloadFile(fileName, request, FileType.SUBMISSION);
+	}
+
+	@RequestMapping("/api/submissions")
+	public List<Submission> getAllAssignments() {
+		return submissionService.getAllSubmissions();
+	}
+
+	@RequestMapping("/api/submissions/{id}")
+	public ResponseEntity<Submission> getSubmission(@PathVariable String id) {
+		Submission fetchedSubmission = submissionService.getSubmission(id);
+		if (fetchedSubmission != null) {
+			return ResponseEntity.ok(fetchedSubmission);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	private void produceSubmissionUploadEvent(String topic, Submission submission) throws JsonProcessingException {
@@ -88,12 +103,12 @@ public class SubmissionController {
 		throws JsonProcessingException {
 		Student student = jacksonConfiguration.getMapper().readValue(studentJSON, Student.class);
 		Submission submission = new Submission(assignment, student, downloadPath);
-		String submissionId = submissionService.addSubmission(submission);
-		submission.setId(submissionId);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimePattern.YYYY_MM_DD_HH_MM);
 		String currentTime = LocalDateTime.now().format(formatter);
 		submission.setUploadDate(currentTime);
+		String submissionId = submissionService.addSubmission(submission);
+		submission.setId(submissionId);
 		return submission;
 	}
 }
