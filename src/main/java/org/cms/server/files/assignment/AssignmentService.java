@@ -1,8 +1,6 @@
 package org.cms.server.files.assignment;
 
 import java.util.List;
-
-import org.cms.core.course.Course;
 import org.cms.core.files.assignment.Assignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,7 @@ public class AssignmentService {
 	private static final String getAllAssignmentsPrefix = "GET - getAllAssignments";
 	private static final String getAssignmentPrefix = "GET - getAssignment";
 	private static final String addAssignmentPrefix = "POST - addAssignment";
-	private static final String getAssignmentsWithTheseCoursesPrefix = "GET - getAssignmentsWithTheseCourses";
+	private static final String getDueAssignmentsPrefix = "GET - getDueAssignmentsForStudent";
 
 	private final AssignmentRepository assignmentRepository;
 
@@ -54,14 +52,9 @@ public class AssignmentService {
 		return genId;
 	}
 
-	// Returns the list of assignments that have a course mentioned in `courseIds`
-	public List<Assignment> getAssignmentsWithCourseIds(List<String> courseIds) {
-		logger.info(String.format("[%s] getAssignmentsWithTheseCourses HIT", getAssignmentsWithTheseCoursesPrefix));
-		logger.info(String.format("[%s] Looking for assignments having one or many of these courseIds", getAssignmentsWithTheseCoursesPrefix));
-		for (String id : courseIds) {
-			logger.info(String.format("[%s] Course id - %s", getAssignmentsWithTheseCoursesPrefix, id));
-		}
-
-		return assignmentRepository.findByCourses(courseIds);
+	// Returns the list of due assignments for student having id = `studentId`
+	public List<Assignment> getDueAssignmentsForStudent(String studentId) {
+		logger.info(String.format("[%s] getDueAssignmentsForStudent HIT", getDueAssignmentsPrefix));
+		return assignmentRepository.dueAssignmentsForStudent(studentId);
 	}
 }
