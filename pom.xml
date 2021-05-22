@@ -63,13 +63,13 @@
         <dependency>
             <groupId>org.cms</groupId>
             <artifactId>events</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.cms</groupId>
             <artifactId>core</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2</version>
         </dependency>
 
         <dependency>
@@ -98,7 +98,7 @@
         <repository>
             <id>github</id>
             <name>Github package hosted at a remote location</name>
-            <url>https://maven.pkg.github.com/rohan23chhabra/cms-core</url>
+            <url>https://maven.pkg.github.com/DevourTech/cms-core</url>
             <releases><enabled>true</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>

@@ -1,8 +1,7 @@
-package org.cms.server.files;
+package org.cms.server.files.commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import org.cms.server.files.errors.FileStatus;
 import org.springframework.core.io.Resource;
 
 public class DownloadFileResponse implements Serializable {

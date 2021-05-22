@@ -1,6 +1,6 @@
 package org.cms.server;
 
-import org.cms.server.files.FileStorageProperties;
+import org.cms.server.files.commons.FileStorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

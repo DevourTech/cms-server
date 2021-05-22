@@ -1,4 +1,4 @@
-package org.cms.server.files;
+package org.cms.server.files.commons;
 
 import java.io.Serializable;
 
