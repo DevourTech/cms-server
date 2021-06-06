@@ -10,6 +10,9 @@ import org.springframework.data.repository.query.Param;
 public interface AssignmentRepository extends CrudRepository<Assignment, Integer> {
 	Assignment findById(String id);
 
-	@Query(nativeQuery = true, value = SQLQueries.DUE_ASSIGNMENTS_QUERY)
+	@Query(nativeQuery = true, value = SQLQueries.DUE_ASSIGNMENTS)
 	List<Assignment> dueAssignmentsForStudent(@Param("studentId") String studentId);
+
+	@Query(nativeQuery = true, value = SQLQueries.ASSIGNMENTS_BY_INSTRUCTOR)
+	List<Assignment> getAssignmentsByInstructor(@Param("instructorId") String instructorId);
 }
